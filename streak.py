@@ -3,9 +3,9 @@ import datetime
 import os
 import json
 import pytz
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 
-load_dotenv()
+# load_dotenv()
 
 LEETCODE_USERNAME = os.environ.get("LEETCODE_USERNAME") 
 LINE_CHANNEL_ACCESS_TOKEN = os.environ.get("LINE_CHANNEL_ACCESS_TOKEN")
