@@ -2,7 +2,7 @@ name: LeetCode Streak Alarm
 
 on:
   schedule:
-    - cron: '0 18 * * *'
+    - cron: '0 10 * * *'
     
   workflow_dispatch:
 
