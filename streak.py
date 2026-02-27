@@ -3,6 +3,7 @@ import datetime
 import os
 import json
 import pytz
+import uuid
 # from dotenv import load_dotenv
 
 # load_dotenv()
@@ -19,8 +20,15 @@ HEADERS = {
 def post_graphql(query, variables=None):
     """發送 GraphQL 請求的共用函式"""
     url = "https://leetcode.com/graphql"
+    csrftoken = uuid.uuid4().hex
+    
+    headers = HEADERS.copy()
+    headers["Referer"] = "https://leetcode.com/"
+    headers["X-CSRFToken"] = csrftoken
+    headers["Cookie"] = f"csrftoken={csrftoken};"
+    
     try:
-        response = requests.post(url, json={"query": query, "variables": variables}, headers=HEADERS, timeout=10)
+        response = requests.post(url, json={"query": query, "variables": variables}, headers=headers, timeout=10)
         if response.status_code == 200:
             return response.json()
     except Exception as e:
