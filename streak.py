@@ -35,36 +35,6 @@ def post_graphql(query, variables=None):
         print(f"GraphQL Error: {e}")
     return None
 
-def calculate_streak(submission_calendar_str):
-    if not submission_calendar_str:
-        return 0
-
-    calendar_data = json.loads(submission_calendar_str)
-    submitted_dates = set()
-    
-    for ts in calendar_data.keys():
-        date_obj = datetime.datetime.fromtimestamp(int(ts)).date()
-        submitted_dates.add(date_obj)
-
-    today = datetime.datetime.now().date()
-    yesterday = today - datetime.timedelta(days=1)
-
-    streak = 0
-    current_check_date = today
-
-    if today in submitted_dates:
-        current_check_date = today
-    elif yesterday in submitted_dates:
-        current_check_date = yesterday
-    else:
-        return 0
-
-    while current_check_date in submitted_dates:
-        streak += 1
-        current_check_date -= datetime.timedelta(days=1)
-
-    return streak
-
 def get_submission_status():
     """檢查是否今天有提交 & 從原始資料計算 Streak"""
     query = """
@@ -94,10 +64,8 @@ def get_submission_status():
     streak = 0
     matched_user = data["data"].get("matchedUser")
     if matched_user and matched_user.get("userCalendar"):
-        cal_str = matched_user["userCalendar"].get("submissionCalendar", "{}")
-        
-        streak = calculate_streak(cal_str)
-
+        # 使用 Leetcode API 直接回傳的 streak (會包含 time travel tickets)
+        streak = matched_user["userCalendar"].get("streak", 0)
 
     return last_timestamp, streak
 
